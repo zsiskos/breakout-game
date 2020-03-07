@@ -16,6 +16,13 @@ let rightPressed = false;
 let leftPressed = false;
 //makes a ball at setInterval
 let interval = setInterval(draw, 10);
+//variable to define bricks
+let brickRowCount = 3;
+let brickColumnCount = 5;
+let brickWidth = 75;
+let bringPadding = 10;
+let brickOffsetTop = 30;
+let brickOffsetLeft = 30;
 
 //event listeners
 document.addEventListener("keydown", keyDownHandler, false);
@@ -100,7 +107,9 @@ function keyUpHandler(e) {
 
 
 
-//stretch goals: - random colour every time it hits the wall
+//stretch goals:
+// - random colour every time it hits the wall
+//-  make the ball move faster when it hits the paddle
 
 
 
