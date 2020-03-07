@@ -1,16 +1,19 @@
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
+let canvas = document.getElementById("myCanvas");
+let ctx = canvas.getContext("2d");
 //sets initial location
-var x = canvas.width/2;
-var y = canvas.height-30;
+let x = canvas.width/2;
+let y = canvas.height-30;
 //sets increments that x(-ve = left) and y(-ve = down) 
-var dx = 2;
-var dy = -2;
-var ballRadius = 10;
+let dx = 2;
+let dy = -2;
+let ballRadius = 10;
 //controllers height and width
-var paddleHeight = 10;
-var paddleWidth = 75;
-var paddleX = (canvas.width-paddleWidth) / 2;
+let paddleHeight = 10;
+let paddleWidth = 75;
+let paddleX = (canvas.width-paddleWidth) / 2;
+//controller buttons
+let rightPressed = false;
+let leftPressed = false;
 
 function drawBall() {
     ctx.beginPath();
@@ -44,8 +47,33 @@ function draw() {
         dy = -dy;
     } 
 }
+
+//Handles key press, when pressed down  = true, let go == false
+function keyDownHandler(e) {
+    if (e.key == "Right" || e.key == "ArrowRight") {
+        rightPressed = true;
+    } else if (e.key == "Left" || e.key == "ArrowLeft") {
+        leftPressed = true;
+    }
+}
+
+function keyUpHandler(e) {
+    if (e.key == "Right" || e.key == "ArrowRight") {
+        rightPressed = false;
+    } else if (e.key == "Left" || e.key == "ArrowLeft") {
+        leftPressed = false;
+    }
+}
+
+//event listeners
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+
+
 //makes a ball at setInterval
 setInterval(draw, 10);
+
 
 
 
