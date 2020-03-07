@@ -1,17 +1,23 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
+//sets initial location
 var x = canvas.width/2;
 var y = canvas.height-30;
-
+//sets increments that x and y will change in each direction
+var dx = 2;
+var dy = -2;
 
 //Makes a ball
 function draw() {
     ctx.beginPath();
-    ctx.arc(50, 50, 10, 0, Math.PI*2);
+    ctx.arc(x, y, 10, 0, Math.PI*2);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
+    // every time it runs it changes in increments
+    x += dx;
+    y += dy;
 }
 //makes a ball at setInterval
 setInterval(draw, 10);
