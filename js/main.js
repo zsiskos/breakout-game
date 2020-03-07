@@ -7,6 +7,10 @@ var y = canvas.height-30;
 var dx = 2;
 var dy = -2;
 var ballRadius = 10;
+//controllers height and width
+var paddleHeight = 10;
+var paddleWidth = 75;
+var paddleX = (canvas.width-paddleWidth) / 2;
 
 function drawBall() {
     ctx.beginPath();
@@ -14,13 +18,16 @@ function drawBall() {
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
-    //to make ball bounce off edges
-    if(x + dx > canvas.width || x + dx < 0) {
-        dx = -dx;
-    }
-    if(y + dy > canvas.height || y + dy < 0) {
-        dy = -dy;
-    }    
+    //to make ball bounce off edges 
+}
+
+function drawPaddle() {
+    ctx.beginPath();
+    //to make box first 2 vals spcify the coordinates of top left corner on the box(x and y), the 2nd two ref the width and height
+    ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+    ctx.fillStyle = "#0095DD"
+    ctx.fill();
+    ctx.closePath();
 }
 
 function draw() {
@@ -30,6 +37,12 @@ function draw() {
     // every time it runs it changes in increments
     x += dx;
     y += dy;
+    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+    }
+    if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+        dy = -dy;
+    } 
 }
 //makes a ball at setInterval
 setInterval(draw, 10);
@@ -37,6 +50,8 @@ setInterval(draw, 10);
 
 
 
+
+//stretch goals: - random colour every time it hits the wall
 
 
 
