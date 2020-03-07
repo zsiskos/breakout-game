@@ -37,6 +37,7 @@ function draw() {
     //clears canvas of previously draw item
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
+    drawPaddle();
     // every time it runs it changes in increments
     x += dx;
     y += dy;
@@ -46,6 +47,12 @@ function draw() {
     if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
         dy = -dy;
     } 
+    //handles paddle movement
+    if (rightPressed) {
+        paddleX += 7;
+    } else if (leftPressed) {
+        paddleX -= 7;
+    }
 }
 
 //Handles key press, when pressed down  = true, let go == false
