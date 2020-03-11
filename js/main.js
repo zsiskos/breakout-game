@@ -128,7 +128,7 @@ function draw() {
             }    
         } 
     //handles paddle movement
-    if (rightPressed && paddleX + paddleWidth > canvas.width) {
+    if (rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += 7;
     } else if (leftPressed && paddleX > 0) {
         paddleX -= 7;   
