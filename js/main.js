@@ -14,8 +14,7 @@ let paddleX = (canvas.width-paddleWidth) / 2;
 //controller buttons
 let rightPressed = false;
 let leftPressed = false;
-//makes a ball at setInterval
-let interval = setInterval(draw, 10);
+
 //variable to define bricks
 let brickRowCount = 3;
 let brickColumnCount = 5;
@@ -29,70 +28,13 @@ let bricks = []
 for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
     for (let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0 };
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
     } 
 }
-
 
 //event listeners
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-
-function drawBall() {
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
-    //to make ball bounce off edges 
-}
-
-function drawPaddle() {
-    ctx.beginPath();
-    //to make box first 2 vals spcify the coordinates of top left corner on the box(x and y), the 2nd two ref the width and height
-    ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD"
-    ctx.fill();
-    ctx.closePath();
-}
-
-function draw() {
-    //clears canvas of previously draw item
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBricks();
-    drawBall();
-    drawPaddle();
-    //Collision detection
-    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
-        dx = -dx;
-    }
-    if(y + dy < ballRadius) {
-        dy = -dy;
-    } else if(y + dy > canvas.height-ballRadius) {
-        if(x > paddleX && x < paddleX + paddleWidth) {
-            dy = -dy;
-        } else {
-        alert("Game Over");
-        document.location.reload();
-        clearInterval(interval);
-        }    
-    }    
-    //handles paddle movement
-    if (rightPressed) {
-        paddleX += 7;
-        if (paddleX + paddleWidth > canvas.width) {
-            paddleX = canvas.width - paddleWidth;
-        }
-    } else if (leftPressed) {
-        paddleX -= 7;
-        if (paddleX < 0) {
-            paddleX = 0;
-        }
-    }
-    // every time it runs it changes in increments
-    x += dx;
-    y += dy;
-}
 
 //Handles key press, when pressed down  = true, let go == false
 function keyDownHandler(e) {
@@ -111,24 +53,94 @@ function keyUpHandler(e) {
     }
 }
 
-function drawBricks() {
+//For ball to detect bricks
+function collisionDetection() {
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
-            let brickX = (c*(brickWidth+brickPadding)+brickOffsetLeft);
-            let brickY = (r*(brickHeight+brickPadding)+ brickOffsetTop)
-            bricks[c][r].x = brickX;
-            bricks[c][r].y = brickY;
-            ctx.beginPath();
-            ctx.rect(brickX, brickY, brickWidth, brickHeight);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
+            let b = bricks[c][r];
+            if (b.status == 1) {
+                if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                dy = -dy;
+                b.status = 0;
+                }
+            }
         }
     }
 }
 
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+}
 
+function drawPaddle() {
+    ctx.beginPath();
+    //to make box first 2 vals spcify the coordinates of top left corner on the box(x and y), the 2nd two ref the width and height
+    ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+    ctx.fillStyle = "#0095DD"
+    ctx.fill();
+    ctx.closePath();
+}
 
+function drawBricks() {
+    for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+            if (bricks[c][r].status == 1) {
+                let brickX = (c*(brickWidth+brickPadding)+brickOffsetLeft);
+                let brickY = (r*(brickHeight+brickPadding)+ brickOffsetTop)
+                bricks[c][r].x = brickX;
+                bricks[c][r].y = brickY;
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.fillStyle = "#0095DD";
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+    }
+}
+
+function draw() {
+    //clears canvas of previously draw item
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    collisionDetection();
+    //Collision detection
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+    }
+    if (y + dy < ballRadius) {
+        dy = -dy;
+    } else if (y + dy > canvas.height - ballRadius) {
+        if (x > paddleX && x < paddleX + paddleWidth) {
+            if (y = y - paddleHeight) {
+                dy = -dy;
+            } 
+        } else {
+                alert("Game Over");
+                document.location.reload();
+                clearInterval(interval);
+            }    
+        } 
+    //handles paddle movement
+    if (rightPressed && paddleX + paddleWidth > canvas.width) {
+        paddleX += 7;
+    } else if (leftPressed && paddleX > 0) {
+        paddleX -= 7;   
+    }
+    
+    // every time it runs it changes in increments
+    x += dx;
+    y += dy;
+}
+
+//makes a ball at setInterval
+let interval = setInterval(draw, 10);
 
 
 
